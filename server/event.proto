@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package grpcwebapp;
+package server;
 
 message Event {
     int64 id = 1;
