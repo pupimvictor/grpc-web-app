@@ -11,7 +11,7 @@ import (
 func main(){
 	fmt.Println("hello grpc")
 
-	//var cfg server.Config
+	//var cfg server.Config{}
 	config.LoadEnvConfig(nil)
 
 	// runs the HTTP _AND_ gRPC servers

@@ -19,7 +19,7 @@ It has these top-level messages:
 	StreamEventsResponse
 	Void
 */
-package server
+package grpcwebapp
 
 import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
@@ -425,7 +425,6 @@ func (x *eventLoggerStreamEventsServer) Send(m *StreamEventsResponse) error {
 }
 
 func _EventLogger_StopStreaming_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Void)
 	in := new(Void)
 	if err := dec(in); err != nil {
 		return nil, err
