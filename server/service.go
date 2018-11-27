@@ -1,4 +1,4 @@
-package grpcwebapp
+package server
 
 import (
 	"net/http"
