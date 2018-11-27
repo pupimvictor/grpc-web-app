@@ -1,11 +1,14 @@
 package server
 
 import (
+	"github.com/NYTimes/gizmo/server/kit"
+	"github.com/go-kit/kit/endpoint"
 	"net/http"
 
-	"github.com/NYTimes/gizmo/server"
-	"google.golang.org/grpc"
 
+	"google.golang.org/grpc"
+	httptransport "github.com/go-kit/kit/transport/http"
+	"github.com/NYTimes/gziphandler"
 	"context"
 	"github.com/NYTimes/gizmo/pubsub"
 	"cloud.google.com/go/datastore"
@@ -23,13 +26,13 @@ type (
 	// Config is a struct to contain all the needed
 	// configuration for our service
 	Config struct {
-		Server *server.Config
+
 	}
 )
 
 // NewRPCService will instantiate a service
 // with the given configuration.
-func NewRPCService(cfg *Config) *service {
+func NewRPCService(cfg *Config) kit.Service{
 	//todo init ds and p/s
 	return &service{
 
@@ -37,47 +40,53 @@ func NewRPCService(cfg *Config) *service {
 	}
 }
 
-// Prefix returns the string prefix used for all endpoints within
-// this service.
-func (s *service) Prefix() string {
-	return "/svc"
+func (s service) HTTPRouterOptions() []kit.RouterOption {
+	return nil
 }
 
-// Service provides the service with a description of the
-// service to serve and the implementation.
-func (s *service) Service() (*grpc.ServiceDesc, interface{}) {
-	return &_EventLogger_serviceDesc, s
+func (s service) HTTPOptions() []httptransport.ServerOption {
+	return nil
+}
+
+// HTTPMiddleware provides an http.Handler hook wrapped around all requests.
+// In this implementation, we're using a GzipHandler middleware to
+// compress our responses.
+func (s service) HTTPMiddleware(h http.Handler) http.Handler {
+	return gziphandler.GzipHandler(h)
 }
 
 // Middleware provides an http.Handler hook wrapped around all requests.
 // In this implementation, we're using a GzipHandler middleware to
 // compress our responses.
-func (s *service) Middleware(h http.Handler) http.Handler {
-	return h
+func (s service) Middleware(e endpoint.Endpoint) endpoint.Endpoint {
+	return e
 }
 
-// ContextMiddleware provides a server.ContextHAndler hook wrapped around all
-// requests. This could be handy if you need to decorate the request context.
-func (s *service) ContextMiddleware(h server.ContextHandler) server.ContextHandler {
-	return h
-}
-
-// ContextEndpoints may be needed if your server has any non-RPC-able
-// endpoints. In this case, we have none but still need this method to
-// satisfy the server.service interface.
-func (s *service) ContextEndpoints() map[string]map[string]server.ContextHandlerFunc {
-	return map[string]map[string]server.ContextHandlerFunc{}
-}
-
-// JSONContextEndpoints is a listing of all endpoints available in the service.
-func (s *service) JSONEndpoints() map[string]map[string]server.JSONContextEndpoint {
-	return map[string]map[string]server.JSONContextEndpoint{
+// JSONEndpoints is a listing of all endpoints available in the Service.
+// If using Cloud Endpoints, this is not needed but handy for local dev.
+func (s service) HTTPEndpoints() map[string]map[string]kit.HTTPEndpoint {
+	return map[string]map[string]kit.HTTPEndpoint{
 		"/health": {
-			"GET": s.Health,
+			"GET": {
+				Endpoint:s.Health,
+			},
 		},
 	}
 }
 
-func (s *service) Health(ctx context.Context, r *http.Request) (int, interface{}, error) {
-	return http.StatusOK, "healthy", nil
+func (s service) RPCMiddleware() grpc.UnaryServerInterceptor {
+	return nil
+}
+
+func (s service) RPCOptions() []grpc.ServerOption {
+	return nil
+}
+
+func (s service) RPCServiceDesc() *grpc.ServiceDesc {
+	// snagged from the pb.go file
+	return &_EventLogger_serviceDesc
+}
+
+func (s service) Health(ctx context.Context, _ interface{}) (interface{}, error) {
+	return "healthy", nil
 }

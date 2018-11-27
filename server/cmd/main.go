@@ -11,11 +11,11 @@ import (
 func main(){
 	fmt.Println("hello grpc")
 
-	var cfg server.Config{}
+	var cfg server.Config
 	config.LoadEnvConfig(&cfg)
 
 	// runs the HTTP _AND_ gRPC servers
-	err := kit.Run(&cfg)
+	err := kit.Run(server.NewRPCService(&cfg))
 	if err != nil {
 		panic("problems running service: " + err.Error())
 	}
