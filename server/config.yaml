@@ -1,0 +1,13 @@
+type: google.api.Service
+config_version: 3
+
+name: nytproxy.endpoints.{your-project}.cloud.goog
+
+title: NYT Proxy gRPC API...with cats!
+apis:
+- name: api.ApiService
+
+usage:
+  rules:
+  - selector: "*"
+    allow_unregistered_calls: true

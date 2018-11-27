@@ -19,7 +19,7 @@ It has these top-level messages:
 	StreamEventsResponse
 	Void
 */
-package grpcwebapp
+package server
 
 import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
