@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package grpcwebapp;
+
+message Event {
+    int64 id = 1;
+    string msg = 2;
+    int64 timestamp = 3;
+    System system = 4;
+    Severity severity = 5;
+}
+
+message EventsList {
+    repeated Event events = 1;
+}
+
+message System {
+    int32 id = 1;
+    string label = 2;
+}
+
+message Filter {
+    int32 systemId = 1;
+    int32 severityId = 2;
+    string msg = 3;
+    int64 baseDate = 4;
+}
+
+enum Severity {
+    DEBUG = 0;
+    INFO = 1;
+    WARN = 2;
+    ERROR = 3;
+    CRITICAL = 4;
+}
+
+message EventId {
+    int64 id = 1;
+}
+
+message LoadEventsRequest {
+    Filter filter = 1;
+}
+
+message LoadEventsResponse {
+    EventsList events = 1;
+}
+
+message StreamEventsRequest {
+    Filter filter = 1;
+}
+
+message StreamEventsResponse {
+    Event event = 1;
+}
+
+message Void {}
+
+service EventLogger {
+    rpc LoadEvents(LoadEventsRequest) returns(LoadEventsResponse) {}
+    rpc StreamEvents(StreamEventsRequest) returns(stream StreamEventsResponse) {}
+    rpc StopStreaming(Void) returns(Void) {}
+}
+
+
+
