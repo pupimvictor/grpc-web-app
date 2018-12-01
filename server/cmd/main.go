@@ -15,7 +15,7 @@ func main(){
 	config.LoadEnvConfig(&cfg)
 
 	// runs the HTTP _AND_ gRPC servers
-	err := kit.Run(server.NewRPCService(&cfg))
+	err := kit.Run(server.New(&cfg))
 	if err != nil {
 		panic("problems running service: " + err.Error())
 	}

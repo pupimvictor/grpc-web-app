@@ -5,13 +5,12 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	"net/http"
 
-
-	"google.golang.org/grpc"
-	httptransport "github.com/go-kit/kit/transport/http"
-	"github.com/NYTimes/gziphandler"
+	"cloud.google.com/go/datastore"
 	"context"
 	"github.com/NYTimes/gizmo/pubsub"
-	"cloud.google.com/go/datastore"
+	"github.com/NYTimes/gziphandler"
+	httptransport "github.com/go-kit/kit/transport/http"
+	"google.golang.org/grpc"
 )
 
 type (
@@ -30,9 +29,9 @@ type (
 	}
 )
 
-// NewRPCService will instantiate a service
+// New will instantiate a service
 // with the given configuration.
-func NewRPCService(cfg *Config) kit.Service{
+func New(cfg *Config) kit.Service{
 	//todo init ds and p/s
 	return &service{
 

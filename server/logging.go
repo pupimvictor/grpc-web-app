@@ -51,13 +51,19 @@ func (s *service) StreamEvents(streamEventsRequest *StreamEventsRequest, streamE
 	eventsStream := make(chan *Event)
 	s.PassthroughCh<- eventsStream
 
-	select {
-	case event := <-eventsStream:
-		if applyFilter(eventFilter, event) {
-			streamEventResp := &StreamEventsResponse{
-				Event:event,
+loop:
+	for {
+		select {
+		case event, ok := <-eventsStream:
+			if !ok {
+				break loop
 			}
-			streamEventsServer.Send(streamEventResp)
+			if applyFilter(eventFilter, event) {
+				streamEventResp := &StreamEventsResponse{
+					Event: event,
+				}
+				streamEventsServer.Send(streamEventResp)
+			}
 		}
 	}
 	return nil
