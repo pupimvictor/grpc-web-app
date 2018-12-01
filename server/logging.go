@@ -27,17 +27,19 @@ func (s *service) StartInputstream(ctx context.Context) (error) {
 					passthroughStream <- event
 				}
 			}
-		case eventStream := <-s.PassthroughCh:
+		case eventStream := <-s.passthroughCh:
 			passthroughStream = eventStream
 			passthroughflag = true
 
-		case <-s.StopPassthroughCh:
+		case <-s.stopPassthroughCh:
 			passthroughflag = false
 			close(passthroughStream)
 			passthroughStream = nil
+
+		case <-ctx.Done():
+			return fmt.Errorf("input stream closed")
 		}
 	}
-
 	return nil
 }
 
@@ -49,28 +51,21 @@ func (s *service) StreamEvents(streamEventsRequest *StreamEventsRequest, streamE
 	eventFilter := streamEventsRequest.GetFilter()
 	
 	eventsStream := make(chan *Event)
-	s.PassthroughCh<- eventsStream
+	s.passthroughCh <- eventsStream
 
-loop:
-	for {
-		select {
-		case event, ok := <-eventsStream:
-			if !ok {
-				break loop
+	for event := range eventsStream {
+		if applyFilter(eventFilter, event) {
+			streamEventResp := &StreamEventsResponse{
+				Event: event,
 			}
-			if applyFilter(eventFilter, event) {
-				streamEventResp := &StreamEventsResponse{
-					Event: event,
-				}
-				streamEventsServer.Send(streamEventResp)
-			}
+			streamEventsServer.Send(streamEventResp)
 		}
 	}
 	return nil
 }
 
 func (s *service) StopStreaming(context.Context, *Void) (*Void, error) {
-	s.StopPassthroughCh<- true
+	s.stopPassthroughCh <- true
 	return &Void{}, nil
 }
 

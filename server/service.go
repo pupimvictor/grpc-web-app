@@ -17,10 +17,10 @@ type (
 	// service will implement server.service and
 	// handle all requests to the server.
 	service struct {
-		inputStream        pubsub.Subscriber
-		ds                 *datastore.Client
-		PassthroughCh      chan chan *Event
-		StopPassthroughCh  chan bool
+		inputStream       pubsub.Subscriber
+		ds                *datastore.Client
+		passthroughCh     chan chan *Event
+		stopPassthroughCh chan bool
 	}
 	// Config is a struct to contain all the needed
 	// configuration for our service
