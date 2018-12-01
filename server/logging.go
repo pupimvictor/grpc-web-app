@@ -2,39 +2,41 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"encoding/json"
+	"fmt"
+	"github.com/NYTimes/gizmo/pubsub"
+	"time"
 )
 
-func (s *service) StartInputstream(ctx context.Context) (error) {
-	eventsInputStream := s.inputStream.Start()
-	var passthroughStream chan *Event
-	passthroughflag := false
+func (s *Service) StartInputstream(ctx context.Context, eventsInputStream <-chan pubsub.SubscriberMessage) error {
+	var passthroughStream map[int64]chan *StreamEventsResponse
 
 	//todo: check race conditions for this whole block
 	for {
 		select {
 		case msg := <-eventsInputStream:
-			fmt.Printf("%s", msg.Message())
 			var event *Event
 			json.Unmarshal(msg.Message(), event)
 
 			//todo store in ds
 			fmt.Printf("e: %+v\n", *event)
 
-			if passthroughflag {
-				if passthroughStream != nil {
-					passthroughStream <- event
+			if len(passthroughStream) > 0 {
+				for id, eventCh := range passthroughStream {
+					streamResp := &StreamEventsResponse{
+						StreamId: &StreamId{id},
+						Event:    event,
+					}
+					eventCh<- streamResp
 				}
 			}
 		case eventStream := <-s.passthroughCh:
-			passthroughStream = eventStream
-			passthroughflag = true
+			streamId := time.Now().Unix()
+			passthroughStream[streamId] = eventStream
 
-		case <-s.stopPassthroughCh:
-			passthroughflag = false
-			close(passthroughStream)
-			passthroughStream = nil
+		case streamId := <-s.stopPassthroughCh:
+			close(passthroughStream[streamId])
+			delete(passthroughStream, streamId)
 
 		case <-ctx.Done():
 			return fmt.Errorf("input stream closed")
@@ -43,29 +45,26 @@ func (s *service) StartInputstream(ctx context.Context) (error) {
 	return nil
 }
 
-func (s *service) LoadEvents(ctx context.Context, loadEventsRequest *LoadEventsRequest) (*LoadEventsResponse, error) {
+func (s *Service) LoadEvents(ctx context.Context, loadEventsRequest *LoadEventsRequest) (*LoadEventsResponse, error) {
 	return &LoadEventsResponse{}, nil
 }
 
-func (s *service) StreamEvents(streamEventsRequest *StreamEventsRequest, streamEventsServer EventLogger_StreamEventsServer) error {
+func (s *Service) StreamEvents(streamEventsRequest *StreamEventsRequest, streamEventsServer EventLogger_StreamEventsServer) error {
 	eventFilter := streamEventsRequest.GetFilter()
-	
-	eventsStream := make(chan *Event)
+
+	eventsStream := make(chan *StreamEventsResponse)
 	s.passthroughCh <- eventsStream
 
-	for event := range eventsStream {
-		if applyFilter(eventFilter, event) {
-			streamEventResp := &StreamEventsResponse{
-				Event: event,
-			}
-			streamEventsServer.Send(streamEventResp)
+	for eventResp := range eventsStream {
+		if applyFilter(eventFilter, eventResp.Event) {
+			streamEventsServer.Send(eventResp)
 		}
 	}
 	return nil
 }
 
-func (s *service) StopStreaming(context.Context, *Void) (*Void, error) {
-	s.stopPassthroughCh <- true
+func (s *Service) StopStreaming(context.Context, *Void) (*Void, error) {
+	s.stopPassthroughCh <- 1
 	return &Void{}, nil
 }
 

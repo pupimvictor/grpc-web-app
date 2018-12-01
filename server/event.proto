@@ -52,14 +52,20 @@ message StreamEventsRequest {
 
 message StreamEventsResponse {
     Event event = 1;
+    StreamId streamId = 2;
+    Filter filter = 3;
 }
 
-message Void {}
+message StreamId {
+    int64 id = 1;
+}
+
+message Void{}
 
 service EventLogger {
     rpc LoadEvents(LoadEventsRequest) returns(LoadEventsResponse) {}
     rpc StreamEvents(StreamEventsRequest) returns(stream StreamEventsResponse) {}
-    rpc StopStreaming(Void) returns(Void) {}
+    rpc StopStreaming(StreamId) returns(Void) {}
 }
 
 

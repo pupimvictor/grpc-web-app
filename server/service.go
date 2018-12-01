@@ -14,56 +14,56 @@ import (
 )
 
 type (
-	// service will implement server.service and
+	// Service will implement server.Service and
 	// handle all requests to the server.
-	service struct {
-		inputStream       pubsub.Subscriber
+	Service struct {
+		InputStream       pubsub.Subscriber
 		ds                *datastore.Client
-		passthroughCh     chan chan *Event
-		stopPassthroughCh chan bool
+		passthroughCh     chan chan *StreamEventsResponse
+		stopPassthroughCh chan int64
 	}
 	// Config is a struct to contain all the needed
-	// configuration for our service
+	// configuration for our Service
 	Config struct {
 
 	}
 )
 
-// New will instantiate a service
+// New will instantiate a Service
 // with the given configuration.
 func New(cfg *Config) kit.Service{
 	//todo init ds and p/s
-	return &service{
+	return &Service{
 
 
 	}
 }
 
-func (s service) HTTPRouterOptions() []kit.RouterOption {
+func (s Service) HTTPRouterOptions() []kit.RouterOption {
 	return nil
 }
 
-func (s service) HTTPOptions() []httptransport.ServerOption {
+func (s Service) HTTPOptions() []httptransport.ServerOption {
 	return nil
 }
 
 // HTTPMiddleware provides an http.Handler hook wrapped around all requests.
 // In this implementation, we're using a GzipHandler middleware to
 // compress our responses.
-func (s service) HTTPMiddleware(h http.Handler) http.Handler {
+func (s Service) HTTPMiddleware(h http.Handler) http.Handler {
 	return gziphandler.GzipHandler(h)
 }
 
 // Middleware provides an http.Handler hook wrapped around all requests.
 // In this implementation, we're using a GzipHandler middleware to
 // compress our responses.
-func (s service) Middleware(e endpoint.Endpoint) endpoint.Endpoint {
+func (s Service) Middleware(e endpoint.Endpoint) endpoint.Endpoint {
 	return e
 }
 
 // JSONEndpoints is a listing of all endpoints available in the Service.
 // If using Cloud Endpoints, this is not needed but handy for local dev.
-func (s service) HTTPEndpoints() map[string]map[string]kit.HTTPEndpoint {
+func (s Service) HTTPEndpoints() map[string]map[string]kit.HTTPEndpoint {
 	return map[string]map[string]kit.HTTPEndpoint{
 		"/health": {
 			"GET": {
@@ -73,19 +73,22 @@ func (s service) HTTPEndpoints() map[string]map[string]kit.HTTPEndpoint {
 	}
 }
 
-func (s service) RPCMiddleware() grpc.UnaryServerInterceptor {
+func (s Service) RPCMiddleware() grpc.UnaryServerInterceptor {
+	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error){
+
+		return
+	}
+}
+
+func (s Service) RPCOptions() []grpc.ServerOption {
 	return nil
 }
 
-func (s service) RPCOptions() []grpc.ServerOption {
-	return nil
-}
-
-func (s service) RPCServiceDesc() *grpc.ServiceDesc {
+func (s Service) RPCServiceDesc() *grpc.ServiceDesc {
 	// snagged from the pb.go file
 	return &_EventLogger_serviceDesc
 }
 
-func (s service) Health(ctx context.Context, _ interface{}) (interface{}, error) {
+func (s Service) Health(ctx context.Context, _ interface{}) (interface{}, error) {
 	return "healthy", nil
 }
