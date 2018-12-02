@@ -17,10 +17,12 @@ func main(){
 
 	s := server.New(&cfg)
 	service := s.(*server.Service)
+	service.NewStreamId = server.NewStreamId
+
 	eventsInputStream := service.InputStream.Start()
 
 	ctx := context.Background()
-	service.StartInputstream(ctx, eventsInputStream)
+	service.StartPipeline(ctx, eventsInputStream)
 
 	// runs the HTTP _AND_ gRPC servers
 	err := kit.Run(s)

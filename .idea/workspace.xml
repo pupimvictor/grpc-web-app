@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="46487932-8c6a-4b85-a66f-421bf9af52fd" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/server/logging_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/cmd/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/event.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/event.pb.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/event.proto" beforeDir="false" afterPath="$PROJECT_DIR$/server/event.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/server/go.mod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/logging.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/logging.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/service.go" afterDir="false" />
     </list>
@@ -28,96 +30,140 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Dockerfile" value="69" />
-          <entry key="go" value="844" />
-          <entry key="proto" value="110" />
+          <entry key="go" value="3926" />
+          <entry key="proto" value="116" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="844" />
+          <entry key="Go" value="3926" />
           <entry key="PLAIN_TEXT" value="69" />
-          <entry key="PROTO" value="110" />
+          <entry key="PROTO" value="116" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="Dockerfile" value="1" />
-          <entry key="go" value="7" />
+          <entry key="go" value="16" />
           <entry key="proto" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Go" value="7" />
+          <entry key="Go" value="16" />
           <entry key="PLAIN_TEXT" value="1" />
           <entry key="PROTO" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.go.postfix.template.usages.trigger">
+        <counts>
+          <entry key=".p" value="1" />
+          <entry key=".println" value="1" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/server/cmd/main.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="572">
-              <caret line="22" column="21" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
-              <folding>
-                <element signature="e#14#152#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/service.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/go/pkg/mod/google.golang.org/grpc@v1.16.0/server.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="108" column="21" lean-forward="true" selection-start-line="108" selection-start-column="21" selection-end-line="108" selection-end-column="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/go/pkg/mod/google.golang.org/grpc@v1.16.0/interceptor.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="215">
-              <caret line="53" column="9" selection-start-line="53" selection-start-column="9" selection-end-line="53" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/logging.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="463">
-              <caret line="27" column="40" lean-forward="true" selection-start-line="27" selection-start-column="40" selection-end-line="27" selection-end-column="40" />
-              <folding>
-                <element signature="e#16#69#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/event.proto">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="421">
-              <caret line="56" column="1" lean-forward="true" selection-start-line="56" selection-start-column="1" selection-end-line="56" selection-end-column="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.44142705">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/server/cmd/main.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="358">
+                  <caret line="21" column="48" selection-start-line="21" selection-start-column="48" selection-end-line="21" selection-end-column="48" />
+                  <folding>
+                    <element signature="e#14#152#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/server/service.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="113">
+                  <caret line="22" column="57" lean-forward="true" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="57" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$USER_HOME$/go/pkg/mod/google.golang.org/grpc@v1.16.0/server.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="182">
+                  <caret line="108" column="21" lean-forward="true" selection-start-line="108" selection-start-column="21" selection-end-line="108" selection-end-column="21" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/server/logging.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="316">
+                  <caret line="25" column="49" lean-forward="true" selection-start-line="25" selection-start-column="49" selection-end-line="25" selection-end-column="49" />
+                  <folding>
+                    <element signature="e#16#69#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$USER_HOME$/go/pkg/mod/github.com/!n!y!times/gizmo@v0.3.11/pubsub/pubsub.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="453">
+                  <caret line="52" column="43" lean-forward="true" selection-start-line="52" selection-start-column="4" selection-end-line="52" selection-end-column="43" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$USER_HOME$/go/pkg/mod/github.com/!n!y!times/gizmo@v0.3.11/pubsub/pubsubtest/sub.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="754">
+                  <caret line="35" column="4" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="4" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/server/event.proto">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-847">
+                  <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/server/logging_test.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="330">
+                  <caret line="157" column="43" selection-start-line="157" selection-start-column="43" selection-end-line="157" selection-end-column="43" />
+                  <folding>
+                    <element signature="e#16#72#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$USER_HOME$/go/pkg/mod/github.com/!n!y!times/gizmo@v0.3.11/pubsub/pubsubtest/pub.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="90">
+                  <caret line="28" column="4" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -130,6 +176,7 @@
     <findStrings>
       <find>handle</find>
       <find>call</find>
+      <find>fmt</find>
     </findStrings>
   </component>
   <component name="GOROOT" path="/usr/local/go1.11" />
@@ -149,10 +196,11 @@
         <option value="$PROJECT_DIR$/server/event.pb.go" />
         <option value="$PROJECT_DIR$/server/go.mod" />
         <option value="$PROJECT_DIR$/server/Dockerfile" />
-        <option value="$PROJECT_DIR$/server/event.proto" />
         <option value="$PROJECT_DIR$/server/service.go" />
         <option value="$PROJECT_DIR$/server/cmd/main.go" />
+        <option value="$PROJECT_DIR$/server/event.proto" />
         <option value="$PROJECT_DIR$/server/logging.go" />
+        <option value="$PROJECT_DIR$/server/logging_test.go" />
       </list>
     </option>
   </component>
@@ -238,7 +286,7 @@
     <frame x="-1920" y="-180" width="1920" height="1080" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11341853" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.11341853" />
       <window_info id="Favorites" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32871288" />
@@ -249,7 +297,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.27326733" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.35742575" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -306,16 +354,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/event.pb.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="426" column="17" selection-start-line="426" selection-start-column="17" selection-end-line="426" selection-end-column="17" />
-          <folding>
-            <element signature="e#366#527#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/go.mod">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="338">
@@ -368,34 +406,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/event.proto">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="421">
-          <caret line="56" column="1" lean-forward="true" selection-start-line="56" selection-start-column="1" selection-end-line="56" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/go/pkg/mod/google.golang.org/grpc@v1.16.0/interceptor.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="215">
           <caret line="53" column="9" selection-start-line="53" selection-start-column="9" selection-end-line="53" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/logging.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="463">
-          <caret line="27" column="40" lean-forward="true" selection-start-line="27" selection-start-column="40" selection-end-line="27" selection-end-column="40" />
-          <folding>
-            <element signature="e#16#69#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/service.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -408,10 +422,86 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/cmd/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="572">
-          <caret line="22" column="21" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
+        <state relative-caret-position="358">
+          <caret line="21" column="48" selection-start-line="21" selection-start-column="48" selection-end-line="21" selection-end-column="48" />
           <folding>
             <element signature="e#14#152#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/go/pkg/mod/github.com/!n!y!times/gizmo@v0.3.11/pubsub/pubsubtest/sub.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="754">
+          <caret line="35" column="4" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/go/pkg/mod/github.com/!n!y!times/gizmo@v0.3.11/pubsub/pubsubtest/pub.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="28" column="4" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/go1.11/src/builtin/builtin.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="236">
+          <caret line="51" column="5" selection-start-line="51" selection-start-column="5" selection-end-line="51" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/go/pkg/mod/github.com/!n!y!times/gizmo@v0.3.11/pubsub/gcp/gcp.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3598">
+          <caret line="207" column="6" selection-start-line="207" selection-start-column="6" selection-end-line="207" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/go/pkg/mod/github.com/!n!y!times/gizmo@v0.3.11/pubsub/pubsub.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="453">
+          <caret line="52" column="43" lean-forward="true" selection-start-line="52" selection-start-column="4" selection-end-line="52" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/event.pb.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="196">
+          <caret line="264" column="5" selection-start-line="264" selection-start-column="5" selection-end-line="264" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/event.proto">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-847">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/service.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="113">
+          <caret line="22" column="57" lean-forward="true" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/logging.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="25" column="49" lean-forward="true" selection-start-line="25" selection-start-column="49" selection-end-line="25" selection-end-column="49" />
+          <folding>
+            <element signature="e#16#69#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/logging_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="157" column="43" selection-start-line="157" selection-start-column="43" selection-end-line="157" selection-end-column="43" />
+          <folding>
+            <element signature="e#16#72#0" expanded="true" />
           </folding>
         </state>
       </provider>

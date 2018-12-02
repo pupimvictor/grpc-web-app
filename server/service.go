@@ -18,6 +18,7 @@ type (
 	// handle all requests to the server.
 	Service struct {
 		InputStream       pubsub.Subscriber
+		NewStreamId       func() int64
 		ds                *datastore.Client
 		passthroughCh     chan chan *StreamEventsResponse
 		stopPassthroughCh chan int64

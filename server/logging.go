@@ -8,30 +8,31 @@ import (
 	"time"
 )
 
-func (s *Service) StartInputstream(ctx context.Context, eventsInputStream <-chan pubsub.SubscriberMessage) error {
-	var passthroughStream map[int64]chan *StreamEventsResponse
+func (s *Service) StartPipeline(ctx context.Context, eventsInputStream <-chan pubsub.SubscriberMessage) error {
+	passthroughStream := make(map[int64]chan *StreamEventsResponse)
+
 
 	//todo: check race conditions for this whole block
 	for {
 		select {
 		case msg := <-eventsInputStream:
-			var event *Event
-			json.Unmarshal(msg.Message(), event)
+			var event Event
+			json.Unmarshal(msg.Message(), &event)
 
 			//todo store in ds
-			fmt.Printf("e: %+v\n", *event)
+			fmt.Printf("e: %+v\n", event)
 
 			if len(passthroughStream) > 0 {
 				for id, eventCh := range passthroughStream {
 					streamResp := &StreamEventsResponse{
 						StreamId: &StreamId{id},
-						Event:    event,
+						Event:    &event,
 					}
 					eventCh<- streamResp
 				}
 			}
 		case eventStream := <-s.passthroughCh:
-			streamId := time.Now().Unix()
+			streamId := s.NewStreamId()
 			passthroughStream[streamId] = eventStream
 
 		case streamId := <-s.stopPassthroughCh:
@@ -39,6 +40,7 @@ func (s *Service) StartInputstream(ctx context.Context, eventsInputStream <-chan
 			delete(passthroughStream, streamId)
 
 		case <-ctx.Done():
+			fmt.Errorf("input stream closed")
 			return fmt.Errorf("input stream closed")
 		}
 	}
@@ -70,4 +72,8 @@ func (s *Service) StopStreaming(context.Context, *Void) (*Void, error) {
 
 func applyFilter(f *Filter, e *Event) bool {
 	return true
+}
+
+func NewStreamId() int64{
+	return time.Now().Unix()
 }
