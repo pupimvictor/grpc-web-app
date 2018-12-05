@@ -165,25 +165,19 @@ func TestStartPipeline(t *testing.T) {
 					}(streams)
 				}
 
-				time.Sleep(time.Millisecond * 100)
-
+				time.Sleep(time.Millisecond * 1)
 				bResp, _ := json.Marshal(e)
 				msg := &TestMsg{msg: bResp}
 				eventsInputStream <- msg
-				//time.Sleep(time.Millisecond * 500)
 				for _, p := range test.passthroughs {
 
 					if p.start <= i && p.cancel > i {
 						fmt.Printf("passt picked: %d\n", p.id)
 						go func(pt passthrough, i int) {
 							fmt.Printf("listen to passthrough: %d\n", pt.id)
-							//var mux sync.Mutex
-							//mux.Lock()
 							result := <-pt.passthroughStream
 							if result != nil{
 								fmt.Printf("receiving passthrough %v in %d\n", result, pt.id)
-								//mux.Unlock()
-
 
 								if result.StreamId.Id != pt.expectedOutput[i].StreamId.Id {
 									ts.Errorf("expected streamId %d got %d", pt.expectedOutput[i].StreamId, result.StreamId)
@@ -199,9 +193,7 @@ func TestStartPipeline(t *testing.T) {
 						}(p, i)
 					}
 				}
-				time.Sleep(time.Millisecond * 100)
 			}
-
 		})
 	}
 }

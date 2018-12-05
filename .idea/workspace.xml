@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="46487932-8c6a-4b85-a66f-421bf9af52fd" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/logging.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/events.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/logging_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/events_test.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,13 +26,13 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Dockerfile" value="69" />
-          <entry key="go" value="5027" />
+          <entry key="go" value="5078" />
           <entry key="proto" value="116" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="5027" />
+          <entry key="Go" value="5078" />
           <entry key="PLAIN_TEXT" value="69" />
           <entry key="PROTO" value="116" />
         </counts>
@@ -39,17 +40,15 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="Dockerfile" value="1" />
-          <entry key="go" value="16" />
-          <entry key="js" value="1" />
-          <entry key="proto" value="2" />
+          <entry key="go" value="18" />
+          <entry key="proto" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Go" value="16" />
-          <entry key="JavaScript" value="1" />
+          <entry key="Go" value="18" />
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="PROTO" value="2" />
+          <entry key="PROTO" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.go.postfix.template.usages.trigger">
@@ -63,19 +62,28 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/logging_test.go">
+        <entry file="file://$PROJECT_DIR$/server/events_test.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="487">
-              <caret line="203" selection-start-line="203" selection-end-line="203" />
+            <state relative-caret-position="194">
+              <caret line="148" column="34" selection-start-line="148" selection-start-column="34" selection-end-line="148" selection-end-column="34" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/logging.go">
+        <entry file="file://$PROJECT_DIR$/server/service.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="62" selection-start-line="62" selection-end-line="62" />
+            <state relative-caret-position="2183">
+              <caret line="95" lean-forward="true" selection-start-line="95" selection-end-line="95" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/events.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="194">
+              <caret line="62" column="100" selection-start-line="62" selection-start-column="97" selection-end-line="62" selection-end-column="100" />
             </state>
           </provider>
         </entry>
@@ -83,7 +91,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server/event.proto">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
+            <state relative-caret-position="477">
               <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
             </state>
           </provider>
@@ -103,6 +111,7 @@
       <find>handle</find>
       <find>call</find>
       <find>fmt</find>
+      <find>log</find>
     </findStrings>
   </component>
   <component name="GOROOT" path="/usr/local/go1.11" />
@@ -162,6 +171,11 @@
               <item name="grpc-web-app" type="b2602c69:ProjectViewProjectNode" />
               <item name="grpc-web-app" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="grpc-web-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="grpc-web-app" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -201,7 +215,7 @@
     <frame x="-1920" y="-180" width="1920" height="1080" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.11448349" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11448349" />
       <window_info id="Favorites" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32871288" />
@@ -351,15 +365,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/cmd/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="21" column="52" selection-start-line="21" selection-start-column="52" selection-end-line="21" selection-end-column="52" />
+        <state relative-caret-position="407">
+          <caret line="23" column="31" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="31" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server/service.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="22" column="57" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="57" />
+        <state relative-caret-position="2183">
+          <caret line="95" lean-forward="true" selection-start-line="95" selection-end-line="95" />
         </state>
       </provider>
     </entry>
@@ -391,32 +405,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/logging.go">
+    <entry file="file://$PROJECT_DIR$/server/events_test.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="62" selection-start-line="62" selection-end-line="62" />
+        <state relative-caret-position="194">
+          <caret line="148" column="34" selection-start-line="148" selection-start-column="34" selection-end-line="148" selection-end-column="34" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/logging_test.go">
+    <entry file="file://$PROJECT_DIR$/server/events.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="487">
-          <caret line="203" selection-start-line="203" selection-end-line="203" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/client/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="194">
+          <caret line="62" column="100" selection-start-line="62" selection-start-column="97" selection-end-line="62" selection-end-column="100" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server/event.proto">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
+        <state relative-caret-position="477">
           <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
         </state>
       </provider>

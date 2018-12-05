@@ -13,7 +13,6 @@ func (s *Service) StartPipeline(ctx context.Context, eventsInputStream <-chan pu
 	passthroughStream := make(map[int64]chan *StreamEventsResponse)
 	var mux sync.Mutex
 
-	//todo: check race conditions for this whole block
 	for {
 		select {
 		case msg := <-eventsInputStream:
@@ -30,20 +29,20 @@ func (s *Service) StartPipeline(ctx context.Context, eventsInputStream <-chan pu
 						StreamId: &StreamId{id},
 						Event:    &event,
 					}
-					fmt.Printf("send passthrough %s to %d\n", streamResp.Event.Msg, id)
+					fmt.Printf("send msg %d to stream %d\n", streamResp.Event.Id, id)
 					eventCh<- streamResp
 				}
 			}
 			mux.Unlock()
 		case eventStream := <-s.passthroughCh:
 			streamId := s.NewStreamId()
-			fmt.Printf("receive passthrough ch %d\n", streamId)
+			fmt.Printf("receive passthrough ch for stream %d\n", streamId)
 			mux.Lock()
 			passthroughStream[streamId] = eventStream
 			mux.Unlock()
 
 		case streamId := <-s.stopPassthroughCh:
-			fmt.Printf("receive cancel ch %d\n", streamId)
+			fmt.Printf("receive cancel for stream %d\n", streamId)
 			mux.Lock()
 			close(passthroughStream[streamId])
 			delete(passthroughStream, streamId)
@@ -68,7 +67,6 @@ func (s *Service) StreamEvents(streamEventsRequest *StreamEventsRequest, streamE
 	s.passthroughCh <- eventsStream
 
 	for eventResp := range eventsStream {
-		fmt.Printf("receiving passthrough %s", eventResp.Event.Msg)
 		if applyFilter(eventFilter, eventResp.Event) {
 			streamEventsServer.Send(eventResp)
 		}
