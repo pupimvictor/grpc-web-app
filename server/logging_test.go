@@ -194,7 +194,6 @@ func TestStartPipeline(t *testing.T) {
 					}
 				}
 			}
-
 		})
 	}
 }
