@@ -5,12 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/NYTimes/gizmo/pubsub"
+	"sync"
 	"time"
 )
 
 func (s *Service) StartPipeline(ctx context.Context, eventsInputStream <-chan pubsub.SubscriberMessage) error {
 	passthroughStream := make(map[int64]chan *StreamEventsResponse)
-
+	var mux sync.Mutex
 
 	//todo: check race conditions for this whole block
 	for {
@@ -20,27 +21,36 @@ func (s *Service) StartPipeline(ctx context.Context, eventsInputStream <-chan pu
 			json.Unmarshal(msg.Message(), &event)
 
 			//todo store in ds
-			fmt.Printf("e: %+v\n", event)
+			fmt.Printf("e: %+v\n", event.Msg)
 
+			mux.Lock()
 			if len(passthroughStream) > 0 {
 				for id, eventCh := range passthroughStream {
 					streamResp := &StreamEventsResponse{
 						StreamId: &StreamId{id},
 						Event:    &event,
 					}
+					fmt.Printf("send passthrough %s to %d\n", streamResp.Event.Msg, id)
 					eventCh<- streamResp
 				}
 			}
+			mux.Unlock()
 		case eventStream := <-s.passthroughCh:
 			streamId := s.NewStreamId()
+			fmt.Printf("receive passthrough ch %d\n", streamId)
+			mux.Lock()
 			passthroughStream[streamId] = eventStream
+			mux.Unlock()
 
 		case streamId := <-s.stopPassthroughCh:
+			fmt.Printf("receive cancel ch %d\n", streamId)
+			mux.Lock()
 			close(passthroughStream[streamId])
 			delete(passthroughStream, streamId)
+			mux.Unlock()
 
 		case <-ctx.Done():
-			fmt.Errorf("input stream closed")
+			fmt.Printf("input stream closed\n")
 			return fmt.Errorf("input stream closed")
 		}
 	}
@@ -58,6 +68,7 @@ func (s *Service) StreamEvents(streamEventsRequest *StreamEventsRequest, streamE
 	s.passthroughCh <- eventsStream
 
 	for eventResp := range eventsStream {
+		fmt.Printf("receiving passthrough %s", eventResp.Event.Msg)
 		if applyFilter(eventFilter, eventResp.Event) {
 			streamEventsServer.Send(eventResp)
 		}

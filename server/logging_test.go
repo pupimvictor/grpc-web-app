@@ -3,7 +3,9 @@ package server
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/NYTimes/gizmo/pubsub"
+	"sync"
 	"testing"
 	"time"
 )
@@ -124,11 +126,12 @@ func TestStartPipeline(t *testing.T) {
 			},
 		},
 	}
+	ctx, done := context.WithCancel(context.Background())
+	defer done()
 
 	for _, test := range tests {
 		eventsInputStream := make(chan pubsub.SubscriberMessage)
 
-		ctx, _ := context.WithCancel(context.Background())
 		s := Service{}
 		s.passthroughCh = make(chan chan *StreamEventsResponse)
 		s.stopPassthroughCh = make(chan int64)
@@ -138,40 +141,68 @@ func TestStartPipeline(t *testing.T) {
 		t.Run(test.name, func(ts *testing.T) {
 			for i, e := range test.inputEvents {
 				if streams := shouldStart(test.passthroughs, i); len(streams) > 0 {
-					for _, j := range streams {
-						s.NewStreamId = test.passthroughs[j].testStreamId
-						s.passthroughCh <- test.passthroughs[j].passthroughStream
-					}
+					go func(streams []int){
+						for _, j := range streams {
+							s.NewStreamId = test.passthroughs[j].testStreamId
+							fmt.Printf("sending passthrough ch %d\n", test.passthroughs[j].id)
+							var mux sync.Mutex
+							mux.Lock()
+							s.passthroughCh <- test.passthroughs[j].passthroughStream
+							mux.Unlock()
+						}
+					}(streams)
 				}
+
 				if streams := shouldCancel(test.passthroughs, i); len(streams) > 0 {
-					for _, j := range streams {
-						s.stopPassthroughCh <- test.passthroughs[j].testStreamId()
-					}
+					go func(streams []int) {
+						for _, j := range streams {
+							fmt.Printf("sending cancel  %d\n", test.passthroughs[j].id)
+							var mux sync.Mutex
+							mux.Lock()
+							s.stopPassthroughCh <- test.passthroughs[j].testStreamId()
+							mux.Unlock()
+						}
+					}(streams)
 				}
+
+				time.Sleep(time.Millisecond * 100)
 
 				bResp, _ := json.Marshal(e)
 				msg := &TestMsg{msg: bResp}
 				eventsInputStream <- msg
-
+				//time.Sleep(time.Millisecond * 500)
 				for _, p := range test.passthroughs {
+
 					if p.start <= i && p.cancel > i {
-						result := <-p.passthroughStream
+						fmt.Printf("passt picked: %d\n", p.id)
+						go func(pt passthrough, i int) {
+							fmt.Printf("listen to passthrough: %d\n", pt.id)
+							//var mux sync.Mutex
+							//mux.Lock()
+							result := <-pt.passthroughStream
+							if result != nil{
+								fmt.Printf("receiving passthrough %v in %d\n", result, pt.id)
+								//mux.Unlock()
 
-						if result.StreamId.Id != p.expectedOutput[i].StreamId.Id {
-							ts.Errorf("expected streamId %d got %d", p.expectedOutput[i].StreamId, result.StreamId)
-						}
 
-						if applyFilter(p.filter, result.Event) {
-							if result.Event.Msg != p.expectedOutput[i].Event.Msg {
-								ts.Errorf("expected %+v\n got %+v", p.expectedOutput[i].Event, result.Event)
+								if result.StreamId.Id != pt.expectedOutput[i].StreamId.Id {
+									ts.Errorf("expected streamId %d got %d", pt.expectedOutput[i].StreamId, result.StreamId)
+								}
+
+								if applyFilter(pt.filter, result.Event) {
+									if result.Event.Msg != pt.expectedOutput[i].Event.Msg {
+										ts.Errorf("expected %+v\n got %+v", pt.expectedOutput[i].Event, result.Event)
+									}
+								}
 							}
-						}
+
+						}(p, i)
 					}
 				}
+				time.Sleep(time.Millisecond * 100)
 			}
+
 		})
-		//close(eventsInputStream)
-		//done()
 	}
 }
 
