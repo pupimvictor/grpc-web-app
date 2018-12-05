@@ -15,7 +15,7 @@ message EventsList {
 }
 
 message Filter {
-    int32 systemId = 1;
+    string system = 1;
     int32 severityId = 2;
     string msg = 3;
     int64 baseDate = 4;
