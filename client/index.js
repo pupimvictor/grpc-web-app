@@ -29,3 +29,5 @@ var eventsLoggerApp = new EventsLoggerApp(
         }
     }
 );
+
+eventLoggerService.load()

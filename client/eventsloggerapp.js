@@ -38,5 +38,5 @@ eventsapp.App.prototype.loadEvents = function(f){
 
 eventsapp.App.prototype.load = function(){
     console.log("load app")
-    this.loadEvents(({msg: "test", baseDate: 1544049929, severity: 1, system: "A"}))
+    this.loadEvents(({msg: "", baseDate: 1544049929, severity: 1, system: "A"}))
 };
