@@ -1,6 +1,6 @@
 ## A Real Time Logger Client Using gRPC-Web
 
-Following the GA announcement of gRPC-web last october, I'm creating this small project for learning purposes.
+Following the GA announcement of gRPC-Web last October, I'm creating this small project for learning purposes.
 
 The project has the client side written in Javascript and it is statically served. The backend is Golang using NYTimes Gizmo framework.
 
