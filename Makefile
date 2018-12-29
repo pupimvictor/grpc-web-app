@@ -44,7 +44,7 @@ cli-upload:
 
 cli-deploy:
 	kubectl delete deployment events-cli
-	kubectl apply -f ./cli/kube.yaml
+	kubectl apply -f ./client/kube.yaml
 
 cli-ship: cli-install cli-pack cli-upload cli-deploy
 

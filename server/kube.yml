@@ -2,8 +2,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  # If deploying to separate namespaces, the `env` part of the name
-  # may be unnecessary, but can be left for clarity.
   name: events-server
   labels:
     app: grpc-web-app-server
