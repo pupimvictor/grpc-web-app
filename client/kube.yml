@@ -1,0 +1,110 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # If deploying to separate namespaces, the `env` part of the name
+  # may be unnecessary, but can be left for clarity.
+  name: events-cli
+  labels:
+    app: grpc-web-app-cli
+
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+
+  selector:
+    matchLabels:
+      app: grpc-web-app-cli
+      env: dev
+
+  template:
+    metadata:
+      labels:
+        app: grpc-web-app-cli
+        env: dev
+    spec:
+      containers:
+      - name: events-cli
+        image: us.gcr.io/nyt-adtech-dev/grpc-web-app/events-cli:latest
+        #        ${TAG}
+        ports:
+        - containerPort: 8080
+
+        readinessProbe:
+          # Success on 200 response
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 2
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        # livenessProbe failure tells Kubernetes to restart this container
+        livenessProbe:
+          # Success on socket connection to port
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 2
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        lifecycle:
+          preStop:
+            httpGet:
+              port: 8080
+              path: /pre-stop
+
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+          limits:
+            cpu: 250m
+            memory: 400Mi
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: events-cli-pdb
+spec:
+  maxUnavailable: 2
+  selector:
+    matchLabels:
+      app: grpc-web-app-cli
+      env: dev
+---
+kind: HorizontalPodAutoscaler
+apiVersion: autoscaling/v1
+
+metadata:
+  name: events-cli-hpa
+
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    apiVersion: apps/v1
+    name: events-cli
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 70
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: events-cli-svc
+  labels:
+    app: grpc-web-app-cli
+spec:
+  ports:
+  - port: 9001
+    name: grpc-web-events-cli-port
+  selector:
+    app: grpc-web-app-cli
+    env: dev
