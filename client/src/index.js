@@ -7,7 +7,7 @@ const { LoadEventsRequest,
         LoadEventsResponse,
         EventsList,
         Event
-        } = require('./generated/event_pb')
+        } = require('../generated/event_pb')
 const {EventsLoggerApp} = require('./eventsloggerapp.js')
 
 var eventLoggerService = new EventLoggerClient("http://localhost:8080", null, null)

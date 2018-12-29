@@ -4,7 +4,8 @@ TAG?=$(shell date +%s)
 
 export TAG
 
-install:
+###################### server ######################
+vendor:
 	go mod vendor
 
 build:
@@ -29,4 +30,8 @@ deploy:
 
 ship: install build pack upload deploy
 
+###################### client ######################
+
+protoc:
+	protoc event.proto --js_out=import_style=commonjs:./client/generated --grpc-web_out=import_style=commonjs,mode=grpcwebtext,out=event_grpc_pb.js:./client/generated --plugin=protoc-gen-grpc-web=/Users/208323/git/grpc-web/javascript/net/grpc/web/protoc-gen-grpc-web
 
