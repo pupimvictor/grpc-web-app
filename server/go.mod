@@ -6,7 +6,6 @@ require (
 	github.com/NYTimes/gziphandler v1.0.1
 	github.com/go-kit/kit v0.8.0
 	github.com/gogo/protobuf v1.1.1
-	github.com/google/martian v2.1.0+incompatible
 	github.com/google/pprof v0.0.0-20181127221834-b4f47329b966 // indirect
 	github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6 // indirect
 	golang.org/x/arch v0.0.0-20181203225421-5a4828bb7045 // indirect

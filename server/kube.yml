@@ -1,0 +1,194 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # If deploying to separate namespaces, the `env` part of the name
+  # may be unnecessary, but can be left for clarity.
+  name: events-server
+  labels:
+    app: grpc-web-app-server
+
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+
+  selector:
+    matchLabels:
+      app: grpc-web-app-server
+      env: dev
+
+  template:
+    metadata:
+      labels:
+        app: grpc-web-app-server
+        env: dev
+    spec:
+      containers:
+      - name: events-server
+        image: us.gcr.io/nyt-adtech-dev/grpc-web-app/events-server:latest
+        #        ${TAG}
+        ports:
+        - containerPort: 8080
+
+        readinessProbe:
+          # Success on 200 response
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 2
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        # livenessProbe failure tells Kubernetes to restart this container
+        livenessProbe:
+          # Success on socket connection to port
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 2
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        lifecycle:
+          preStop:
+            httpGet:
+              port: 8080
+              path: /pre-stop
+
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+          limits:
+            cpu: 250m
+            memory: 400Mi
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: events-server-pdb
+spec:
+  maxUnavailable: 2
+  selector:
+    matchLabels:
+      app: grpc-web-app-server
+      env: dev
+---
+kind: HorizontalPodAutoscaler
+apiVersion: autoscaling/v1
+
+metadata:
+  name: events-server-hpa
+
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    apiVersion: apps/v1
+    name: events-server
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 70
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: events-server-svc
+  labels:
+    app: grpc-web-app-server
+spec:
+  ports:
+  - port: 9000
+    name: grpc-web-events-server-port
+  selector:
+    app: grpc-web-app-server
+    env: dev
+
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: grpc-web-app-gateway
+spec:
+  selector:
+    istio: ingressgateway # use Istio default gateway implementation
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: grpc-web-app-vs
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - grpc-web-app-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api
+    - port: 9000
+    route:
+    - destination:
+        host: events-server-svc
+        port:
+          number: 9000
+    corsPolicy:
+      allowOrigin:
+      - "*"
+      allowMethods:
+      - POST
+      - GET
+      - OPTIONS
+      - PUT
+      - DELETE
+      allowHeaders:
+      - grpc-timeout
+      - content-type
+      - keep-alive
+      - user-agent
+      - cache-control
+      - content-type
+      - content-transfer-encoding
+      - custom-header-1
+      - x-accept-content-transfer-encoding
+      - x-accept-response-streaming
+      - x-user-agent
+      - x-grpc-web
+      maxAge: 1728s
+      exposeHeaders:
+      - custom-header-1
+      - grpc-status
+      - grpc-message
+      allowCredentials: true
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: grpc-web-filter
+spec:
+  workloadLabels:
+    app: events-server-svc #your service name
+  filters:
+  - listenerMatch:
+      portNumber: 9000 #your service's port
+      listenerType: SIDECAR_INBOUND
+    filterName: envoy.grpc_web
+    filterType: HTTP
+    filterConfig: {}
+    insertPosition:
+      index: FIRST
